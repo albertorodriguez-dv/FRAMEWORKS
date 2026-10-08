@@ -47,7 +47,7 @@ app.post('/habitaciones', (req, res) => {
 
   estancias.push(nuevaEstancia);
 
-  res.json(nuevaEstancia);
+  res.json(estancias);
 })
 
 // app.listen(3000, callback)
