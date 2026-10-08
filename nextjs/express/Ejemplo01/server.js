@@ -40,7 +40,7 @@ app.get("/habitaciones/:codigo", (req, res, next) => {
   }
 
   if (!encontrado) {
-	  next({status: 404, message: `No existe una instancia con el código: ${estanciaBuscar}`});
+	  return next({status: 404, message: `No existe una instancia con el código: ${estanciaBuscar}`});
   }
 });
 
@@ -50,6 +50,10 @@ app.post('/habitaciones', (req, res) => {
   estancias.push(nuevaEstancia);
 
   res.json(estancias);
+});
+
+app.put('/habitaciones/:codigo/temperatura-confort', (req, res, next) => {
+
 });
 
 app.use((req, res) => {
