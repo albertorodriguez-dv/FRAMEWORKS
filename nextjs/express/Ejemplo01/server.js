@@ -43,7 +43,11 @@ app.get("/habitaciones/:codigo", (req, res) => {
 });
 
 app.post('/habitaciones', (req, res) => {
-  
+  let nuevaEstancia = req.body;
+
+  estancias.push(nuevaEstancia);
+
+  res.json(nuevaEstancia);
 })
 
 // app.listen(3000, callback)
