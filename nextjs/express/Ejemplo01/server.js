@@ -53,7 +53,23 @@ app.post('/habitaciones', (req, res) => {
 });
 
 app.put('/habitaciones/:codigo/temperatura-confort', (req, res, next) => {
+	let encontrado = false;
+	let estanciaBuscar = req.params.codigo;
+	let nuevaEstancia = req.body;
 
+	for (let i = 0; i < estancias.length; i++) {
+		if (estancias[i].codigo === estanciaBuscar) {
+			estancias[i].temperaturaConfort = nuevaEstancia.temperaturaConfort;
+			encontrado = true;
+
+			res.json(estancias[i]);
+			break;
+		}
+	}
+
+	if (!encontrado) {
+		return next({status: 404, message: `No existe una instancia con el código: ${estanciaBuscar}`});
+	}
 });
 
 app.use((req, res) => {
