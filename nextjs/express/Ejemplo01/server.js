@@ -62,7 +62,7 @@ app.put('/habitaciones/:codigo/temperatura-confort', (req, res, next) => {
 			estancias[i].temperaturaConfort = nuevaEstancia.temperaturaConfort;
 			encontrado = true;
 
-			res.json(estancias[i]);
+			res.json(estancias);
 			break;
 		}
 	}
