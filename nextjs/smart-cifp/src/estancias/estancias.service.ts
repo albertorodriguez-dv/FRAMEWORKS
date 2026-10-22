@@ -14,16 +14,31 @@ export class EstanciasService {
     return ESTANCIAS;
   }
 
-  getNumberElements() {
+  getNumberElements(): string {
     return 'El número total de estancias es ' + ESTANCIAS.length;
   }
 
   getOne(@Param('codigo') id: string) {
-    for (let i = 0; i < ESTANCIAS.length; i++) {
+    for (let i: number = 0; i < ESTANCIAS.length; i++) {
       if (ESTANCIAS[i].codigo === id) {
         return ESTANCIAS[i];
       }
     }
     throw new NotFoundException(`No existe una zona con el código: ${id}`);
+  }
+
+  NumeroTotalRadiadores(): number {
+    let total: number = 0;
+
+    for (let i: number = 0; i < ESTANCIAS.length; i++) {
+      total += ESTANCIAS[i].nRadiadores;
+    }
+
+    return total;
+  }
+
+  NumeroRadiadoresEstancias(id: string): number {
+    const estancia = this.getOne(id);
+    return estancia.nRadiadores;
   }
 }
