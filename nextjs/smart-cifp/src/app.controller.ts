@@ -5,9 +5,13 @@ import { AppService } from './app.service.js';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  // Comentario de prueba
   @Get()
   getHello(): string {
     return this.appService.getHello();
+  }
+
+  @Get('ping')
+  enviarMensaje(): string {
+    return 'Esto es el smart-cifp';
   }
 }
