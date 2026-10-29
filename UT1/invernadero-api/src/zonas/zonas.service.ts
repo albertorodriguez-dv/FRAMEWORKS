@@ -1,41 +1,33 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 const ZONAS_EJEMPLO = [
   {
-    codigo: 'A23',
-    nombre: 'Semillero',
-    nRadiadores: 2,
-    temperaturaConfort: 20,
+    codigo: 'Z01',
+    nombre: 'Tomates - nave norte',
+    cultivo: 'Tomate',
+    humedadSeca: 45,
+    humedadObjetivo: 65,
   },
   {
-    codigo: 'A24',
-    nombre: 'Cultivo de tomates',
-    nRadiadores: 3,
-    temperaturaConfort: 22,
+    codigo: 'Z02',
+    nombre: 'Lechugas - nave centro',
+    cultivo: 'Lechuga',
+    humedadSeca: 55,
+    humedadObjetivo: 75,
   },
   {
-    codigo: 'A25',
-    nombre: 'Cultivo de lechugas',
-    nRadiadores: 2,
-    temperaturaConfort: 18,
+    codigo: 'Z03',
+    nombre: 'Pimientos - nave sur',
+    cultivo: 'Pimiento',
+    humedadSeca: 40,
+    humedadObjetivo: 60,
   },
   {
-    codigo: 'A26',
-    nombre: 'Cultivo de pimientos',
-    nRadiadores: 4,
-    temperaturaConfort: 24,
-  },
-  {
-    codigo: 'A27',
-    nombre: 'Zona de germinación',
-    nRadiadores: 3,
-    temperaturaConfort: 21,
-  },
-  {
-    codigo: 'A28',
-    nombre: 'Plantas tropicales',
-    nRadiadores: 4,
-    temperaturaConfort: 26,
+    codigo: 'Z04',
+    nombre: 'Semillero de fresas',
+    cultivo: 'Fresa',
+    humedadSeca: 50,
+    humedadObjetivo: 70,
   },
 ];
 
@@ -45,11 +37,12 @@ export class ZonasService {
     return ZONAS_EJEMPLO;
   }
 
-  contarZonas() {
-    return ZONAS_EJEMPLO.length;
-  }
-
-  encuentraUno(codigo: string) {
-    return ZONAS_EJEMPLO.find((zona) => zona.codigo === codigo);
+  encuentraUno(id: string) {
+    for (let i = 0; i < ZONAS_EJEMPLO.length; i++) {
+      if (ZONAS_EJEMPLO[i].codigo === id) {
+        return ZONAS_EJEMPLO[i]; //res.json() envía una respuesta JSON al cliente. En este caso, se envía el objeto estancia correspondiente al código proporcionado como re...
+      }
+    }
+    throw new NotFoundException(`Zona ${id} no encontrada`); //Si no se encuentra ninguna estancia con el código proporcionado, se lanza una excepción NotFoundException con un me...
   }
 }
