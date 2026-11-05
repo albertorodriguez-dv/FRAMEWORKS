@@ -1,4 +1,13 @@
-import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Body,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
+import { UpdateTemperaturaConfortDto } from './dto/update-estancias.dto.js';
 import { EstanciasService } from './estancias.service.js';
 
 @Controller('estancias')
@@ -23,16 +32,11 @@ export class EstanciasController {
   @Patch(':codigo/estancias')
   actualizaEstancias(
     @Param('codigo') id: string,
-    @Body() dto: UpdateEstanciasDto,
+    @Body() dto: UpdateTemperaturaConfortDto,
   ) {
-    const zona = this.estanciasService.getOne(id);
-    if (dto.humedadSeca >= dto.humedadObjetivo) {
-      throw new BadRequestException(
-        'humedadSeca debe ser menor que humedadObjetivo',
-      );
-    }
+    const estancia = this.estanciasService.getOne(id);
 
-    zona.temperaturaConfort = dto.humedadSeca;
-    return zona;
+    estancia.temperaturaConfort = dto.temperaturaConfort;
+    return estancia;
   }
 }
