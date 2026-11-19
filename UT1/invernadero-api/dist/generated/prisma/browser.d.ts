@@ -1,0 +1,12 @@
+import * as Prisma from './internal/prismaNamespaceBrowser';
+export { Prisma };
+export * as $Enums from './enums';
+export * from './enums';
+export type cultivos = Prisma.cultivosModel;
+export type estados_bomba = Prisma.estados_bombaModel;
+export type estados_valvula = Prisma.estados_valvulaModel;
+export type lecturas = Prisma.lecturasModel;
+export type roles = Prisma.rolesModel;
+export type umbrales_riego = Prisma.umbrales_riegoModel;
+export type usuarios = Prisma.usuariosModel;
+export type zonas = Prisma.zonasModel;

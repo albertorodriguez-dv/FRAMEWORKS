@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+require("dotenv/config");
 const common_1 = require("@nestjs/common");
 const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
@@ -12,8 +13,8 @@ async function bootstrap() {
         whitelist: true,
         transform: true,
     }));
-    app.useGlobalFilters(new http_exception_filter_1.HttpExceptionFilter());
     app.useGlobalInterceptors(new logging_interceptor_1.LoggingInterceptor(), new transform_interceptor_1.TransformInterceptor());
+    app.useGlobalFilters(new http_exception_filter_1.HttpExceptionFilter());
     await app.listen(process.env.PORT ?? 3000);
 }
 void bootstrap();

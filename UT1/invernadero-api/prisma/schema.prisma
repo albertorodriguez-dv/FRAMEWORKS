@@ -1,0 +1,121 @@
+generator client {
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  importFileExtension = ""
+  moduleFormat        = "cjs"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model cultivos {
+  id_cultivo        Int     @id @default(autoincrement())
+  nombre            String  @unique(map: "uq_cultivos_nombre") @db.VarChar(50)
+  temperatura_min   Decimal @db.Decimal(4, 1)
+  temperatura_max   Decimal @db.Decimal(4, 1)
+  humedad_suelo_min Decimal @db.Decimal(4, 1)
+  humedad_suelo_max Decimal @db.Decimal(4, 1)
+  zonas             zonas[]
+}
+
+model estados_bomba {
+  id     Int                  @id @default(autoincrement())
+  estado estados_bomba_estado
+  fecha  DateTime             @db.Date
+  hora   DateTime             @db.Time(0)
+
+  @@index([fecha, hora], map: "ix_bomba_momento")
+}
+
+model estados_valvula {
+  id          Int                    @id @default(autoincrement())
+  codigo_zona String                 @db.VarChar(10)
+  estado      estados_valvula_estado
+  fecha       DateTime               @db.Date
+  hora        DateTime               @db.Time(0)
+  motivo      estados_valvula_motivo @default(AUTOMATICO)
+  id_usuario  Int?
+  usuarios    usuarios?              @relation(fields: [id_usuario], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_valvula_usuario")
+  zonas       zonas                  @relation(fields: [codigo_zona], references: [codigo_zona], onUpdate: Restrict, map: "fk_valvula_zona")
+
+  @@index([id_usuario], map: "fk_valvula_usuario")
+  @@index([codigo_zona, fecha, hora], map: "ix_valvula_zona_momento")
+}
+
+model lecturas {
+  id            Int      @id @default(autoincrement())
+  codigo_zona   String   @db.VarChar(10)
+  fecha         DateTime @db.Date
+  hora          DateTime @db.Time(0)
+  temperatura_c Decimal? @db.Decimal(4, 1)
+  humedad_suelo Decimal? @db.Decimal(4, 1)
+  litros        Decimal  @default(0.00) @db.Decimal(6, 2)
+  zonas         zonas    @relation(fields: [codigo_zona], references: [codigo_zona], onUpdate: Restrict, map: "fk_lecturas_zona")
+
+  @@unique([codigo_zona, fecha, hora], map: "uq_lecturas_zona_momento")
+}
+
+model roles {
+  id_rol      Int        @id @default(autoincrement())
+  nombre      String     @unique(map: "uq_roles_nombre") @db.VarChar(20)
+  descripcion String     @db.VarChar(150)
+  usuarios    usuarios[]
+}
+
+model umbrales_riego {
+  id               Int       @id @default(autoincrement())
+  codigo_zona      String    @db.VarChar(10)
+  humedad_seca     Decimal   @db.Decimal(4, 1)
+  humedad_objetivo Decimal   @db.Decimal(4, 1)
+  fecha_hora       DateTime  @db.DateTime(0)
+  id_usuario       Int?
+  usuarios         usuarios? @relation(fields: [id_usuario], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "fk_umbrales_usuario")
+  zonas            zonas     @relation(fields: [codigo_zona], references: [codigo_zona], onUpdate: Restrict, map: "fk_umbrales_zona")
+
+  @@index([id_usuario], map: "fk_umbrales_usuario")
+  @@index([codigo_zona, id], map: "ix_umbrales_zona")
+}
+
+model usuarios {
+  id_usuario      Int               @id @default(autoincrement())
+  email           String            @unique(map: "uq_usuarios_email") @db.VarChar(100)
+  nombre          String            @db.VarChar(80)
+  password        String            @db.VarChar(100)
+  id_rol          Int
+  creado_el       DateTime          @default(now()) @db.DateTime(0)
+  estados_valvula estados_valvula[]
+  umbrales_riego  umbrales_riego[]
+  roles           roles             @relation(fields: [id_rol], references: [id_rol], onUpdate: Restrict, map: "fk_usuarios_rol")
+
+  @@index([id_rol], map: "fk_usuarios_rol")
+}
+
+model zonas {
+  codigo_zona     String            @id @db.VarChar(10)
+  nombre          String            @db.VarChar(60)
+  id_cultivo      Int
+  superficie_m2   Decimal           @db.Decimal(6, 1)
+  caudal_l_min    Decimal           @db.Decimal(5, 2)
+  estados_valvula estados_valvula[]
+  lecturas        lecturas[]
+  umbrales_riego  umbrales_riego[]
+  cultivos        cultivos          @relation(fields: [id_cultivo], references: [id_cultivo], onUpdate: Restrict, map: "fk_zonas_cultivo")
+
+  @@index([id_cultivo], map: "fk_zonas_cultivo")
+}
+
+enum estados_bomba_estado {
+  ON
+  OFF
+}
+
+enum estados_valvula_estado {
+  ABIERTA
+  CERRADA
+}
+
+enum estados_valvula_motivo {
+  AUTOMATICO
+  MANUAL
+}

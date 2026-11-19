@@ -1,0 +1,16 @@
+import * as runtime from "@prisma/client/runtime/client";
+import * as $Class from "./internal/class";
+import * as Prisma from "./internal/prismaNamespace";
+export * as $Enums from './enums';
+export * from "./enums";
+export declare const PrismaClient: $Class.PrismaClientConstructor;
+export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts extends Prisma.PrismaClientOptions["omit"] = Prisma.PrismaClientOptions["omit"], ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = $Class.PrismaClient<LogOpts, OmitOpts, ExtArgs>;
+export { Prisma };
+export type cultivos = Prisma.cultivosModel;
+export type estados_bomba = Prisma.estados_bombaModel;
+export type estados_valvula = Prisma.estados_valvulaModel;
+export type lecturas = Prisma.lecturasModel;
+export type roles = Prisma.rolesModel;
+export type umbrales_riego = Prisma.umbrales_riegoModel;
+export type usuarios = Prisma.usuariosModel;
+export type zonas = Prisma.zonasModel;
